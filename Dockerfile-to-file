@@ -1,0 +1,16 @@
+# use the official Bun image
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM node:21-alpine as base
+
+ARG FILES
+
+WORKDIR /tmp
+
+RUN npm install -g @ajuvercr/js-runner
+
+# install dependencies into temp directory
+# this will cache them and speed up future builds
+COPY . /tmp/
+RUN npm install
+
+ENTRYPOINT [ "npx", "js-runner"]
