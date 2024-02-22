@@ -1,0 +1,62 @@
+@prefix rml: <http://w3id.org/rml/>.
+@prefix js: <https://w3id.org/conn/js#>.
+@prefix ws: <https://w3id.org/conn/ws#>.
+@prefix : <https://w3id.org/conn#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rml: <https://w3id.org/conn/rml#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+
+<> owl:imports <../node_modules/@ajuvercr/js-runner/ontology.ttl>.
+<> owl:imports <../node_modules/@ajuvercr/js-runner/channels/file.ttl>.
+<> owl:imports <../node_modules/@ajuvercr/js-runner/channels/http.ttl>.
+<> owl:imports <../node_modules/ldes-client/processor.ttl>.
+<> owl:imports <../node_modules/@treecg/sds-storage-writer-mongo/step.ttl>.
+<> owl:imports <server.ttl>.
+
+<writer> a js:JsWriterChannel.
+<reader> a js:JsReaderChannel.
+[ ] a js:JsChannel;
+  :reader <reader>;
+  :writer <writer>.
+
+[ ] a js:LdesClient;
+  js:output <writer>;
+  js:url <MRGID-LDES-export.ttl>;
+  js:ordered "none";
+  js:follow false;
+  js:interval 5000;
+  js:shapeFile <shape.ttl>;
+  js:loose false;
+  js:urlIsView true;
+  js:verbose false.
+
+<metadata/in> a :FileReaderChannel;
+  :fileReadFirstContent "true";
+  :fileOnReplace "true";
+  :filePath <./metadataIn.ttl>.
+
+[ ] a js:Ingest;
+  js:dataInput <reader>;
+  js:metadataInput <metadata/in>;
+  js:database [
+    js:metadata "META";
+    js:data "DATA";
+    js:index "INDEX";
+    js:url "mongodb://mongodb:27017/maregraph";
+  ];
+  js:pageSize 150.
+
+
+[ ] a js:SolidServer;
+  js:database [
+    js:metadata "META";
+    js:data "DATA";
+    js:index "INDEX";
+    js:url "mongodb://mongodb:27017/maregraph";
+  ];
+  js:view [
+    js:prefix "default";
+    js:stream "http://marineregions.org/feed";
+    js:description "http://localhost:3000/ldes/#timestampFragmentation";
+  ].

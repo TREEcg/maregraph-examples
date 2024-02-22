@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@solid/community-server": "^5.0.0",
+    "@treecg/sds-storage-writer-mongo": "^0.1.0",
+    "ldes-solid-server": "^0.0.12",
     "ldes-client": "^0.0.5"
   }
 }

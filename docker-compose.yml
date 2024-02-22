@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+    ldes-mongodb:
+        container_name: mongodb
+        image: mongo:latest
+        ports:
+        - 27017:27017
+        networks:
+        - ldes
+    ingest:
+        build: 
+          context: .
+          dockerfile: ./Dockerfile-to-file
+        ports:
+         - "3000:3000"
+        volumes:
+        - ./:/tmp/pipeline
+        command: /tmp/pipeline/ingest.ttl
+        networks:
+        - ldes
+        depends_on:
+        - ldes-mongodb
+
+networks:
+    ldes:
+        name: benchmark_network

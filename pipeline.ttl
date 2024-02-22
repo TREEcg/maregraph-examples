@@ -24,9 +24,10 @@
   js:ordered "none";
   js:follow false;
   js:interval 5000;
-  js:shapeFile <shape.ttl>;
   js:noShape false;
   js:loose false;
   js:urlIsView false;
   js:verbose true.
+
+
 
